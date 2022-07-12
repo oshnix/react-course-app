@@ -1,14 +1,20 @@
 import {TaskForm} from "./TaskForm";
-import React, { useContext } from "react";
+import React from "react";
 import { tasksApi } from "../api/tasksApi"
 import {Task} from "./Task";
-import {TasksContext} from "../tasksContext";
+import {useDispatch, useSelector} from "react-redux";
+import {selectTasksArray} from "../store/tasksSelectors";
+import {createAddTaskAction, createTaskAddedAction} from "../store/tasksActions";
 
 export function TaskListPage() {
-    const tasks = useContext(TasksContext);
+    const dispatch = useDispatch();
+    const tasks = useSelector(selectTasksArray);
 
     const onTaskAdd = (taskName: string) => {
-        tasksApi.saveTask({ name: taskName, details: '' });
+        dispatch(createAddTaskAction(taskName));
+        tasksApi.saveTask({ name: taskName, details: '' }).then((createdTask) => {
+            dispatch(createTaskAddedAction(createdTask));
+        });
     }
 
     return (

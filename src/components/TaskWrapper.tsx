@@ -1,25 +1,24 @@
-import { TasksContext } from "../tasksContext";
 import {Route, Routes} from "react-router-dom";
 import {TaskListPage} from "./TaskListPage";
 import {TaskDetailsPage} from "./TaskDetailsPage";
-import {useEffect, useState} from "react";
-import {ITask, tasksApi} from "../api/tasksApi";
+import {useEffect} from "react";
+import {tasksApi} from "../api/tasksApi";
+import {useDispatch} from "react-redux";
+import {createTasksLoadedAction} from "../store/tasksActions";
 
 export function TaskWrapper() {
-    const [tasks, setTasks] = useState<Array<ITask>>([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         tasksApi.getTasks().then(result => {
-            setTasks(result);
+            dispatch(createTasksLoadedAction(result));
         });
     }, []);
 
     return (
-        <TasksContext.Provider value={tasks}>
-            <Routes>
-                <Route index element={<TaskListPage/>} />
-                <Route path="/:id" element={<TaskDetailsPage/>} />
-            </Routes>
-        </TasksContext.Provider>
+        <Routes>
+            <Route index element={<TaskListPage/>}/>
+            <Route path="/:id" element={<TaskDetailsPage/>}/>
+        </Routes>
     );
 }

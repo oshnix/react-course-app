@@ -4,6 +4,7 @@ import {TaskWrapper} from "../components/TaskWrapper";
 
 export enum AppRoutes {
     Index = '/',
+    Login = '/login',
     Tasks = '/tasks/*',
     TaskDetails = '/tasks/:id',
 }

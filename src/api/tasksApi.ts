@@ -28,6 +28,8 @@ export const tasksApi = {
         const existingTasks = await tasksApi.getTasks();
         const lastElement = existingTasks[existingTasks.length - 1];
         const newId = lastElement ? lastElement.id + 1 : 0;
-        saveToLocalStorage(localStorageKey, [...existingTasks, { ...task, id: newId }]);
+        const newTask = { ...task, id: newId }
+        saveToLocalStorage(localStorageKey, [...existingTasks, newTask ]);
+        return newTask
     }
 }
