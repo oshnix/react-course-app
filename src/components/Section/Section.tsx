@@ -1,11 +1,11 @@
 import classes from './section.module.scss';
+import {Outlet} from "react-router-dom";
 
 interface ISectionProps {
-    children: JSX.Element | Array<JSX.Element>;
     header?: string;
 }
 
-export function Section({ header, children }: ISectionProps) {
+export function Section({ header }: ISectionProps) {
     return (
         <section className={classes.section}>
             {header && (
@@ -13,7 +13,7 @@ export function Section({ header, children }: ISectionProps) {
                     {header}
                 </header>
             )}
-            {children}
+            <Outlet/>
         </section>
     )
 }
