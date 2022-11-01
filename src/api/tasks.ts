@@ -13,6 +13,8 @@ export interface ITask {
     name: string;
 }
 
+
+
 export const TasksListContext = createContext<Array<ITask>>([]);
 
 export async function getTasks(): Promise<Array<ITask>> {
@@ -20,8 +22,6 @@ export async function getTasks(): Promise<Array<ITask>> {
     if (!content) {
         return defaultTasksList;
     }
-
-    await new Promise(resolve => setTimeout(resolve, 10_000));
 
     return JSON.parse(content);
 }

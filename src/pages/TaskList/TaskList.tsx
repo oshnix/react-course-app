@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import {TasksListContext} from "../../api/tasks";
 import {Link} from "react-router-dom";
+import {TaskCreate} from "./TastCreate/TaskCreate";
 
 function useTaskListState() {
     const [inputValue, setInputValue] = useState('');
@@ -27,6 +28,7 @@ export function TaskList () {
 
     return (
         <>
+            <TaskCreate />
             <input value={inputValue} onChange={onChange} onKeyDown={onKeyDown} />
             <ul>
                 {tasks.map(item => (
