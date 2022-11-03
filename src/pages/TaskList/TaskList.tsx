@@ -1,35 +1,15 @@
-import React, {useContext, useState} from "react";
-import {TasksListContext} from "../../api/tasks";
+import React from "react";
 import {Link} from "react-router-dom";
 import {TaskCreate} from "./TastCreate/TaskCreate";
-
-function useTaskListState() {
-    const [inputValue, setInputValue] = useState('');
-    const tasks = useContext(TasksListContext);
-    // const [tasks, setTasks] = useState(initialTasksList);
-
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value);
-    }
-
-    const onKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Enter') {
-            // setTasks([...tasks, {name: inputValue}]);
-            setInputValue('');
-        }
-    }
-
-    return { inputValue, tasks, onChange, onKeyDown };
-}
-
+import {useSelector} from "react-redux";
+import {selectTasks} from "../../store/tasks/tasksSelector";
 
 export function TaskList () {
-    const { tasks, onKeyDown, onChange, inputValue } = useTaskListState();
+    const tasks = useSelector(selectTasks);
 
     return (
         <>
             <TaskCreate />
-            <input value={inputValue} onChange={onChange} onKeyDown={onKeyDown} />
             <ul>
                 {tasks.map(item => (
                     <li key={item.name}>

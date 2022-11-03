@@ -1,21 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Counter} from './pages/Counter/Counter';
 import {Section} from "./components/Section/Section";
 import {TaskList} from "./pages/TaskList/TaskList";
 import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 import {TaskDetails} from "./pages/TaskDetails";
-import {getTasks, ITask, TasksListContext} from './api/tasks';
+import {getTasks} from './api/tasks';
+import {useDispatch, useSelector} from "react-redux";
+import {tasksLoaded} from "./store/tasks/tasksActions";
+import {selectIsTasksLoading} from "./store/tasks/tasksSelector";
 
 function App() {
-    const [tasks, setTasks] = useState<Array<ITask> | null>(null);
+    const dispatch = useDispatch();
+    const isTasksLoading = useSelector(selectIsTasksLoading);
 
     useEffect(() => {
-        getTasks().then(setTasks);
+        getTasks().then((tasksList) => {
+            dispatch(tasksLoaded(tasksList));
+        });
     }, []);
 
-    return tasks ? (
+    return !isTasksLoading ? (
         <BrowserRouter>
-            <TasksListContext.Provider value={tasks}>
             <header>
                 <Link to="/counter">
                     Counter
@@ -26,19 +31,18 @@ function App() {
             </header>
             <main>
                 <Routes>
-                    <Route path="/" element={<Navigate to="/counters" />} />
-                    <Route element={<Section />}>
-                        <Route path="/counters" element={<Counter />} />
+                    <Route path="/" element={<Navigate to="/counters"/>}/>
+                    <Route element={<Section/>}>
+                        <Route path="/counters" element={<Counter/>}/>
                     </Route>
-                    <Route element={<Section />}>
-                        <Route path="/tasks" element={<TaskList/>} />
+                    <Route element={<Section/>}>
+                        <Route path="/tasks" element={<TaskList/>}/>
                     </Route>
-                    <Route element={<Section />}>
-                        <Route path="/tasks/:id" element={<TaskDetails/>} />
+                    <Route element={<Section/>}>
+                        <Route path="/tasks/:id" element={<TaskDetails/>}/>
                     </Route>
                 </Routes>
             </main>
-            </TasksListContext.Provider>
         </BrowserRouter>
     ) : (
         <div>
