@@ -2,25 +2,23 @@ import React, {useEffect} from 'react';
 import {Counter} from './pages/Counter/Counter';
 import {Section} from "./components/Section/Section";
 import {TaskList} from "./pages/TaskList/TaskList";
-import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
+import {unstable_HistoryRouter as HistoryRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 import {TaskDetails} from "./pages/TaskDetails";
-import {getTasks} from './api/tasks';
 import {useDispatch, useSelector} from "react-redux";
-import {tasksLoaded} from "./store/tasks/tasksActions";
 import {selectIsTasksLoading} from "./store/tasks/tasksSelector";
+import {history} from "./history";
+import {AppDispatch, loadTasks} from "./store/tasks/tasksThunks";
 
 function App() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const isTasksLoading = useSelector(selectIsTasksLoading);
 
     useEffect(() => {
-        getTasks().then((tasksList) => {
-            dispatch(tasksLoaded(tasksList));
-        });
+        dispatch(loadTasks())
     }, []);
 
     return !isTasksLoading ? (
-        <BrowserRouter>
+        <HistoryRouter history={history}>
             <header>
                 <Link to="/counter">
                     Counter
@@ -43,7 +41,7 @@ function App() {
                     </Route>
                 </Routes>
             </main>
-        </BrowserRouter>
+        </HistoryRouter>
     ) : (
         <div>
             Loading
