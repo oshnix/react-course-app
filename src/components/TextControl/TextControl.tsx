@@ -6,13 +6,13 @@ interface ITextControlProps {
     placeholder: string;
 }
 
-export function TextControl({name, placeholder}: ITextControlProps) {
+export function TextControl({ name, placeholder }: ITextControlProps) {
     const [field, meta] = useField(name);
     const hasError = meta.touched && meta.error
 
     return (
         <div>
-            <input type="text" placeholder={placeholder} {...field} />
+            <input type="text" placeholder={placeholder} {...field} data-testid={name} />
             {hasError && (
                 <span>{meta.error}</span>
             )}
